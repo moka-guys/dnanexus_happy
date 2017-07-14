@@ -12,18 +12,19 @@ mv /home/dnanexus/in in
 ln -sf /work/in /home/dnanexus/in
 
 #Extract software from assets folder
-dx cat $DX_PROJECT_CONTEXT_ID:/assets/hap.py-HAP-207.tar.gz | tar -C / -zxf -
+#dx cat $DX_PROJECT_CONTEXT_ID:/assets/hap.py-HAP-207.tar.gz | tar -C / -zxf -
 dx cat $DX_PROJECT_CONTEXT_ID:/assets/hs37d5-fasta.tar | tar xf -
 dx cat $DX_PROJECT_CONTEXT_ID:/assets/hs37d5-sdf.tar | tar xf -
-dx cat $DX_PROJECT_CONTEXT_ID:/assets/pysam-0.9.1-pandas-0.18.1-numpy-1.11.0-Cython-0.24.tar.gz | tar zxf -
-dx cat $DX_PROJECT_CONTEXT_ID:/assets/rtg-tools-3.6-dev-2365fac.tar.gz | tar zxf -
+#dx cat $DX_PROJECT_CONTEXT_ID:/assets/pysam-0.9.1-pandas-0.18.1-numpy-1.11.0-Cython-0.24.tar.gz | tar zxf -
+#dx cat $DX_PROJECT_CONTEXT_ID:/assets/rtg-tools-3.6-dev-2365fac.tar.gz | tar zxf -
 dx cat $DX_PROJECT_CONTEXT_ID:/assets/stratification-bed-files-f35a0f7.tar | tar xf -
 
+cp ./bed_files/files-HG001.tsv ./files-HG001.tsv
 #Create symbolic link for hap.py
-ln -s /opt/hap.py-HAP-207 hap.py
+#ln -s /opt/hap.py-HAP-207 hap.py
 
 #Set HGREF environment variable (used by hap.py)
-export HGREF=$HOME/hs37d5.fa
+#export HGREF=$HOME/hs37d5.fa
 
 #Unzip zipped VCF files
 truth_vcf=$truth_vcf_path
@@ -56,22 +57,19 @@ bgzip $query_vcf; tabix -p vcf ${query_vcf}.gz
 #Create intersect BED
 bedtools intersect -a $panel_bed_path -b $high_conf_bed_path > intersect.bed
 
+#Create filepath for docker enviroment (replace '/home/dnanexus' with '/data')
+truth_vcf_docker=$(echo $truth_vcf | sed -e "s/home\/dnanexus/data/g")
+query_vcf_docker=$(echo $query_vcf | sed -e "s/home\/dnanexus/data/g")
+
 #Run hap.py; if sample is NA12878, use HG001 stratification file
 if $na12878; then
-	./hap.py/bin/hap.py --no-fixchr-truth --no-fixchr-query --pass-only --no-auto-index \
-                    -r ./hs37d5.fa \
-                    --stratification ./bed_files/files-HG001.tsv \
-                    --engine vcfeval --engine-vcfeval-path ./rtg/rtg --engine-vcfeval-template ./hs37d5.sdf/ \
-                    -f ./intersect.bed \
-                    -o "$prefix" \
-                    ${truth_vcf}.gz ${query_vcf}.gz
+     dx-docker run -v /work/:/data pkrusche/hap.py:v0.3.9 /opt/hap.py/bin/hap.py \
+          -r /data/hs37d5.fa --stratification data/files-HG001.tsv --pass-only \
+          --engine vcfeval -f data/intersect.bed -o data/"$prefix" ${truth_vcf_docker}.gz ${query_vcf_docker}.gz
 else
-	./hap.py/bin/hap.py --no-fixchr-truth --no-fixchr-query --pass-only --no-auto-index \
-                    -r ./hs37d5.fa \
-                    --engine vcfeval --engine-vcfeval-path ./rtg/rtg --engine-vcfeval-template ./hs37d5.sdf/ \
-                    -f ./intersect.bed \
-                    -o "$prefix" \
-                    ${truth_vcf}.gz ${query_vcf}.gz
+     dx-docker run -v /work/:/data pkrusche/hap.py:v0.3.9 /opt/hap.py/bin/hap.py \
+          -r /data/hs37d5.fa --pass-only \
+          --engine vcfeval -f data/intersect.bed -o data/"$prefix" ${truth_vcf_docker}.gz ${query_vcf_docker}.gz
 fi
 
 #Process outputs

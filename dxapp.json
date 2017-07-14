@@ -72,9 +72,24 @@
         "name": "bedtools"
       }
     ],
+    "assetDepends": [
+      {
+        "project": "project-F4vYpqQ0777Z1VjzGPj79v67",
+        "folder": "/assets",
+        "version": "0.0.1",
+        "name": "pkrusche/hap.py:v0.3.9"
+      }
+    ],
+    "systemRequirementsByRegion": {
+      "aws:us-east-1": {
+        "*": {
+          "instanceType": "mem1_ssd1_x4"
+        }
+      }
+    },
     "systemRequirements": {
       "*": {
-        "instanceType": "mem1_ssd1_x2"
+        "instanceType": "mem1_ssd1_x4"
       }
     },
     "file": "src/code.sh",
