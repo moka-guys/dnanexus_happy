@@ -42,8 +42,8 @@
     },
     {
       "name": "na12878",
-      "label": "Is the truth set NA12878?",
-      "help": "If the truth set is NA12878 stratification of results will be performed",
+      "label": "Perform NA12878 stratification? (SEE README)",
+      "help": "If the truth set is NA12878, stratification of results will be performed. However this requires the instance type to be upgraded to at least 7GB of RAM and will take longer.",
       "class": "boolean",
       "default": false
     }
@@ -89,7 +89,7 @@
     },
     "systemRequirements": {
       "*": {
-        "instanceType": "mem1_ssd1_x4"
+        "instanceType": "mem1_ssd1_x2"
       }
     },
     "file": "src/code.sh",

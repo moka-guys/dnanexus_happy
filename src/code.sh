@@ -55,21 +55,23 @@ bgzip $truth_vcf; tabix -p vcf ${truth_vcf}.gz
 bgzip $query_vcf; tabix -p vcf ${query_vcf}.gz
 
 #Create intersect BED
-bedtools intersect -a $panel_bed_path -b $high_conf_bed_path > intersect.bed
+#bedtools intersect -a $panel_bed_path -b $high_conf_bed_path > intersect.bed
 
-#Create filepath for docker enviroment (replace '/home/dnanexus' with '/data')
+#Create filepaths for docker enviroment (replace '/home/dnanexus' with '/data')
 truth_vcf_docker=$(echo $truth_vcf | sed -e "s/home\/dnanexus/data/g")
 query_vcf_docker=$(echo $query_vcf | sed -e "s/home\/dnanexus/data/g")
+high_conf_bed_docker=$(echo $high_conf_bed_path | sed -e "s/home\/dnanexus/data/g")
+panel_bed_docker=$(echo $panel_bed_path | sed -e "s/home\/dnanexus/data/g")
 
 #Run hap.py; if sample is NA12878, use HG001 stratification file
 if $na12878; then
      dx-docker run -v /work/:/data pkrusche/hap.py:v0.3.9 /opt/hap.py/bin/hap.py \
           -r /data/hs37d5.fa --stratification data/files-HG001.tsv --pass-only \
-          --engine vcfeval -f data/intersect.bed -o data/"$prefix" ${truth_vcf_docker}.gz ${query_vcf_docker}.gz
+          --engine vcfeval -f ${high_conf_bed_docker} -T ${panel_bed_docker} -o data/"$prefix" ${truth_vcf_docker}.gz ${query_vcf_docker}.gz
 else
      dx-docker run -v /work/:/data pkrusche/hap.py:v0.3.9 /opt/hap.py/bin/hap.py \
           -r /data/hs37d5.fa --pass-only \
-          --engine vcfeval -f data/intersect.bed -o data/"$prefix" ${truth_vcf_docker}.gz ${query_vcf_docker}.gz
+          --engine vcfeval -f ${high_conf_bed_docker} -T ${panel_bed_docker} -o data/"$prefix" ${truth_vcf_docker}.gz ${query_vcf_docker}.gz
 fi
 
 #Process outputs
