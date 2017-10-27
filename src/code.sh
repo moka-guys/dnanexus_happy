@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# -e = exit on error; -x = output each line that is executed to log; -o pipefail = throw an error if there's an error in pipeline
 set -e -x -o pipefail
 
 #Download inputs from DNAnexus in parallel, these will be downloaded to /home/dnanexus/in/
@@ -54,24 +55,25 @@ sed  -i 's/chr//' $truth_vcf $query_vcf $panel_bed_path $high_conf_bed_path
 #Zip and index VCFs
 bgzip $truth_vcf; tabix -p vcf ${truth_vcf}.gz
 bgzip $query_vcf; tabix -p vcf ${query_vcf}.gz
-
-#Create filepaths for docker enviroment (replace '/home/dnanexus' with '/data')
-truth_vcf_docker=$(echo $truth_vcf | sed -e "s/home\/dnanexus/data/g")
-query_vcf_docker=$(echo $query_vcf | sed -e "s/home\/dnanexus/data/g")
-high_conf_bed_docker=$(echo $high_conf_bed_path | sed -e "s/home\/dnanexus/data/g")
-panel_bed_docker=$(echo $panel_bed_path | sed -e "s/home\/dnanexus/data/g")
+#Following gzipping, append .gz to vcf filepath variables
+truth_vcf=${truth_vcf}.gz
+query_vcf=${query_vcf}.gz
 
 #Run hap.py in docker container
 #Mount /home/dnanexus/ to /data/
-#If sample is NA12878, use HG001 stratification file
+#For input files that are stored in /home/dnanexus/in/... replace '/home/dnanexus' with '/data' in filepath using: ${orig_filepath/home\/dnanexus/data} 
+#If sample is flagged as NA12878, use HG001 stratification bed files (indexed in files-HG001.tsv) to provide additional stratification of results
 if $na12878; then
      dx-docker run -v /home/dnanexus/:/data pkrusche/hap.py:v0.3.9 /opt/hap.py/bin/hap.py \
           -r /data/hs37d5.fa --stratification data/files-HG001.tsv --pass-only \
-          --engine vcfeval -f ${high_conf_bed_docker} -T ${panel_bed_docker} -o data/"$prefix" ${truth_vcf_docker}.gz ${query_vcf_docker}.gz
+          --engine vcfeval -f ${high_conf_bed_path/home\/dnanexus/data} -T ${panel_bed_path/home\/dnanexus/data} \
+          -o data/"$prefix" ${truth_vcf/home\/dnanexus/data} ${query_vcf/home\/dnanexus/data}
+#Else if sample is not flagged as NA12878, run same command as above but without the stratification option
 else
      dx-docker run -v /home/dnanexus/:/data pkrusche/hap.py:v0.3.9 /opt/hap.py/bin/hap.py \
           -r /data/hs37d5.fa --pass-only \
-          --engine vcfeval -f ${high_conf_bed_docker} -T ${panel_bed_docker} -o data/"$prefix" ${truth_vcf_docker}.gz ${query_vcf_docker}.gz
+          --engine vcfeval -f ${high_conf_bed_path/home\/dnanexus/data} -T ${panel_bed_path/home\/dnanexus/data} \
+          -o data/"$prefix" ${truth_vcf/home\/dnanexus/data} ${query_vcf/home\/dnanexus/data}
 fi
 
 #Make directories to hold outputs
