@@ -6,10 +6,14 @@ set -e -x -o pipefail
 #Download inputs from DNAnexus in parallel, these will be downloaded to /home/dnanexus/in/
 dx-download-all-inputs --parallel
 
-#Extract software from assets folder into /home/dnanexus/
+#Extract required resources from assets folder into /home/dnanexus/
+dx cat $DX_PROJECT_CONTEXT_ID:/assets/R-3.4.2_ggplot2.tar.gz | tar zxf -
 dx cat $DX_PROJECT_CONTEXT_ID:/assets/hs37d5-fasta.tar | tar xf -
 dx cat $DX_PROJECT_CONTEXT_ID:/assets/hs37d5-sdf.tar | tar xf -
 dx cat $DX_PROJECT_CONTEXT_ID:/assets/stratification-bed-files-f35a0f7.tar | tar xf -
+
+#Add R to path
+export PATH='/home/dnanexus/R-3.4.2/bin:'$PATH
 
 #The files-HG001.tsv file is a master file containing relative filepaths to all of the bed files used by hap.py for results stratifcation.
 #files-HG001.tsv must in the parent directory of the bed_files/ directory for relative filepaths to be correct, so copy from /home/dnanexus/bed_files/ > /home/dnanexus/ 
@@ -75,6 +79,13 @@ else
           --engine vcfeval -f ${high_conf_bed_path/home\/dnanexus/data} -T ${panel_bed_path/home\/dnanexus/data} \
           -o data/"$prefix" ${truth_vcf/home\/dnanexus/data} ${query_vcf/home\/dnanexus/data}
 fi
+
+#Run R script to generate ROC curves from hap.py output
+#See following link for details and original script: https://github.com/Illumina/hap.py/blob/d51d111e494b561b37c66299daf5a6c65a8d2ca9/doc/microbench.md
+#First command plots true positive rate vs false positive rate
+Rscript rocplot_pdf.Rscript "$prefix".roc_tpr-fpr "$prefix"
+#Second command uses -pr flad to plot precision vs recall 
+Rscript rocplot_pdf.Rscript -pr "$prefix".roc_pre-rec "$prefix"
 
 #Make directories to hold outputs
 mkdir /home/dnanexus/out
