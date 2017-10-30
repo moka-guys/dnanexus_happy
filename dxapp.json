@@ -1,0 +1,106 @@
+{
+  "name": "vcfeval_hap.py",
+  "summary": "v1.0 - Use vcfeval and hap.py to calculate NGS performance metrics against truth set (based on precisionFDA app)",
+  "properties": {
+    "github release": "v1.0"
+  },
+  "dxapi": "1.0.0",
+  "inputSpec": [
+    {
+      "name": "query_vcf",
+      "label": "Query VCF",
+      "help": "VCF file containing queryset variants (.vcf or .vcf.gz)",
+      "class": "file",
+      "patterns": ["*.vcf", "*.vcf.gz"]
+    },
+    {
+      "name": "truth_vcf",
+      "label": "Truth VCF",
+      "help": "VCF file containing truthset variants (.vcf or .vcf.gz)",
+      "class": "file",
+      "patterns": ["*.vcf", "*.vcf.gz"]
+    },
+    {
+      "name": "panel_bed",
+      "label": "Panel BED",
+      "help": "BED containing region (e.g. panel) covered in queryset vcf",
+      "class": "file",
+      "patterns": ["*.bed"]
+    },
+    {
+      "name": "high_conf_bed",
+      "label": "High Confidence BED",
+      "help": "BED containing high confidence region for truth set",
+      "class": "file",
+      "patterns": ["*.bed"]
+    },
+    {
+      "name": "prefix",
+      "label": "Output prefix",
+      "class": "string",
+      "optional": false
+    },
+    {
+      "name": "na12878",
+      "label": "Is the truth set NA12878?",
+      "help": "If the truth set is NA12878 stratification of results will be performed",
+      "class": "boolean",
+      "default": false
+    }
+  ],
+  "outputSpec": [
+    {
+      "name": "detailed_results",
+      "label": "Archive with detailed results",
+      "class": "file"
+    },
+    {
+      "name": "summary_csv",
+      "label": "Summary CSV",
+      "class": "file"
+    }
+  ],
+  "runSpec": {
+    "execDepends": [
+      {
+        "name": "openjdk-8-jre-headless"
+      },
+      {
+        "name": "tabix"
+      },
+      {
+        "name": "bedtools"
+      }
+    ],
+    "assetDepends": [
+      {
+        "project": "project-F4vYpqQ0777Z1VjzGPj79v67",
+        "folder": "/assets",
+        "version": "0.0.1",
+        "name": "pkrusche/hap.py:v0.3.9"
+      }
+    ],
+    "systemRequirementsByRegion": {
+      "aws:us-east-1": {
+        "*": {
+          "instanceType": "mem1_ssd1_x4"
+        }
+      }
+    },
+    "systemRequirements": {
+      "*": {
+        "instanceType": "mem1_ssd1_x4"
+      }
+    },
+    "file": "src/code.sh",
+    "release": "14.04",
+    "interpreter": "bash",
+    "distribution": "Ubuntu"
+  },
+  "access": {
+    "project": "VIEW",
+    "network": [
+      "*"
+    ]
+  }
+}
