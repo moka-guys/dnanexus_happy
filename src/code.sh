@@ -71,13 +71,13 @@ if $na12878; then
      dx-docker run -v /home/dnanexus/:/data pkrusche/hap.py:v0.3.9 /opt/hap.py/bin/hap.py \
           -r /data/hs37d5.fa --stratification data/files-HG001.tsv --pass-only \
           --engine vcfeval -f ${high_conf_bed_path/home\/dnanexus/data} -T ${panel_bed_path/home\/dnanexus/data} \
-          -o data/"$prefix" ${truth_vcf/home\/dnanexus/data} ${query_vcf/home\/dnanexus/data}
+          --ci-alpha 0.05 -o data/"$prefix" ${truth_vcf/home\/dnanexus/data} ${query_vcf/home\/dnanexus/data}
 #Else if sample is not flagged as NA12878, run same command as above but without the stratification option
 else
      dx-docker run -v /home/dnanexus/:/data pkrusche/hap.py:v0.3.9 /opt/hap.py/bin/hap.py \
           -r /data/hs37d5.fa --pass-only \
           --engine vcfeval -f ${high_conf_bed_path/home\/dnanexus/data} -T ${panel_bed_path/home\/dnanexus/data} \
-          -o data/"$prefix" ${truth_vcf/home\/dnanexus/data} ${query_vcf/home\/dnanexus/data}
+          --ci-alpha 0.05 -o data/"$prefix" ${truth_vcf/home\/dnanexus/data} ${query_vcf/home\/dnanexus/data}
 fi
 
 #Run R script to generate ROC curves from hap.py output
