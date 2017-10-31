@@ -67,9 +67,6 @@
       },
       {
         "name": "tabix"
-      },
-      {
-        "name": "bedtools"
       }
     ],
     "assetDepends": [
