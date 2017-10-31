@@ -1,5 +1,9 @@
 # vcfeval_hap.py v1.0
 
+## hap.py version
+v0.3.9 (Docker: https://hub.docker.com/r/pkrusche/hap.py/)
+
+
 ## What does this app do?
 Compares a query VCF to a truth VCF to calculate performance metrics including sensitivity and precision. It is based on the precisionFDA benchmarking tool and uses the vcfeval comparison engine in combination with hap.py. More information available at the following links:
 * https://precision.fda.gov/challenges/truth/results
