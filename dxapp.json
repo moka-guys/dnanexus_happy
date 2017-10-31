@@ -63,9 +63,6 @@
   "runSpec": {
     "execDepends": [
       {
-        "name": "openjdk-8-jre-headless"
-      },
-      {
         "name": "tabix"
       }
     ],
