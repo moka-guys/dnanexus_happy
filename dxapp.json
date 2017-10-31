@@ -63,7 +63,8 @@
   "runSpec": {
     "execDepends": [
       {
-        "name": "tabix"
+        "name": "tabix",
+        "version": "0.2.6-2"
       }
     ],
     "assetDepends": [
