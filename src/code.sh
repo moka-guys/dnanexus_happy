@@ -87,6 +87,15 @@ Rscript rocplot_pdf.Rscript "$prefix".roc_tpr-fpr "$prefix"
 #Second command uses -pr flad to plot precision vs recall 
 Rscript rocplot_pdf.Rscript -pr "$prefix".roc_pre-rec "$prefix"
 
+#Create csv file containing version numbers of resources and apps used.
+echo "#Resource,Version" > "$prefix".version-log.csv
+echo "GIAB(NA12878),v3.3.2" >> "$prefix".version-log.csv
+echo "Reference,hs37d5" >> "$prefix".version-log.csv
+echo "hap.py,v0.3.9(Docker)" >> "$prefix".version-log.csv
+echo "R,v3.4.2" >> "$prefix".version-log.csv
+echo "ggplot2,v2.2.1" >> "$prefix".version-log.csv
+echo "tabix,v0.2.6-2" >> "$prefix".version-log.csv
+
 #Make directories to hold outputs
 mkdir /home/dnanexus/out
 mkdir /home/dnanexus/out/summary_csv
