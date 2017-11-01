@@ -22,46 +22,38 @@ cp ./bed_files/files-HG001.tsv ./files-HG001.tsv
 #The app accept both uncompressed (.vcf) and gzipped (.vcf.gz) VCF files as input
 #If files are compressed, they need to be decompressed.
 
-#Set truth_vcf variable to be the path of the input truth vcf.
-truth_vcf=$truth_vcf_path
-
-if [[  $truth_vcf =~ \.gz$ ]]; then
+if [[  $truth_vcf_path =~ \.gz$ ]]; then
 	#If truth vcf is gzipped...	
 	echo "ZIPPED truth VCF unzipping."
 	#Unzip the vcf
 	gzip -d $truth_vcf_path
 	#Remove the .gz suffix from truth_vcf filepath
-	truth_vcf=$(echo ${truth_vcf_path%.*})
+	truth_vcf_path=$(echo ${truth_vcf_path%.*})
 else 
 	echo "truth VCF not zipped"
 fi
-echo $truth_vcf
 
 #Repeat above steps for the query_vcf
-#Set query_vcf variable to be the path of the input query vcf.
-query_vcf=$query_vcf_path
-
-if [[  $query_vcf =~ \.gz$ ]]; then 
+if [[  $query_vcf_path =~ \.gz$ ]]; then 
 	#If query vcf is gzipped...		
 	echo "ZIPPED query VCF unzipping."
 	#Unzip the vcf
 	gzip -d $query_vcf_path
 	#Remove the .gz suffix from query_vcf filepath
-	query_vcf=$(echo ${query_vcf_path%.*})
+	query_vcf_path=$(echo ${query_vcf_path%.*})
 else 
 	echo "query VCF not zipped"
 fi
-echo $query_vcf
 
 #Strip 'chr' from chromsome field of VCF and BED files
-sed  -i 's/chr//' $truth_vcf $query_vcf $panel_bed_path $high_conf_bed_path
+sed  -i 's/chr//' $truth_vcf_path $query_vcf_path $panel_bed_path $high_conf_bed_path
 
 #Zip and index VCFs
-bgzip $truth_vcf; tabix -p vcf ${truth_vcf}.gz
-bgzip $query_vcf; tabix -p vcf ${query_vcf}.gz
+bgzip $truth_vcf_path; tabix -p vcf ${truth_vcf_path}.gz
+bgzip $query_vcf_path; tabix -p vcf ${query_vcf_path}.gz
 #Following gzipping, append .gz to vcf filepath variables
-truth_vcf=${truth_vcf}.gz
-query_vcf=${query_vcf}.gz
+truth_vcf_path=${truth_vcf_path}.gz
+query_vcf_path=${query_vcf_path}.gz
 
 #Run hap.py in docker container
 #Mount /home/dnanexus/ to /data/
@@ -71,13 +63,13 @@ if $na12878; then
      dx-docker run -v /home/dnanexus/:/data pkrusche/hap.py:v0.3.9 /opt/hap.py/bin/hap.py \
           -r /data/hs37d5.fa --stratification data/files-HG001.tsv --pass-only \
           --engine vcfeval -f ${high_conf_bed_path/home\/dnanexus/data} -T ${panel_bed_path/home\/dnanexus/data} \
-          --ci-alpha 0.05 -o data/"$prefix" ${truth_vcf/home\/dnanexus/data} ${query_vcf/home\/dnanexus/data}
+          --ci-alpha 0.05 -o data/"$prefix" ${truth_vcf_path/home\/dnanexus/data} ${query_vcf_path/home\/dnanexus/data}
 #Else if sample is not flagged as NA12878, run same command as above but without the stratification option
 else
      dx-docker run -v /home/dnanexus/:/data pkrusche/hap.py:v0.3.9 /opt/hap.py/bin/hap.py \
           -r /data/hs37d5.fa --pass-only \
           --engine vcfeval -f ${high_conf_bed_path/home\/dnanexus/data} -T ${panel_bed_path/home\/dnanexus/data} \
-          --ci-alpha 0.05 -o data/"$prefix" ${truth_vcf/home\/dnanexus/data} ${query_vcf/home\/dnanexus/data}
+          --ci-alpha 0.05 -o data/"$prefix" ${truth_vcf_path/home\/dnanexus/data} ${query_vcf_path/home\/dnanexus/data}
 fi
 
 #Run R script to generate ROC curves from hap.py output
