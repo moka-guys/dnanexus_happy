@@ -36,18 +36,18 @@ Note:
 This app outputs:
 1. Summary csv file containing separate performance metrics for SNPs and Indels
 2. Detailed results folder containing:
-    * Extended csv file - *contains performance metrics at multiple stratification levels*
-    * ROC analysis files
+    * Extended csv file - *Contains confidence intervals and results stratification*
+    * ROC plots (see https://github.com/Illumina/hap.py/blob/d51d111e494b561b37c66299daf5a6c65a8d2ca9/doc/microbench.md)
     * VCF file - *contains TP, FP and FN variants*
 
 
 ## How does this app work?
 
 * 'chr' is stripped from the chromosome field of the VCF and BED files (if hg19 format used)
-* bedtools is used to create an intersect BED from high conf and panel BED files
 * Indexed and zipped VCF files passed to hap.py:
    * Uses vcfeval comparison engine
    * If the sample is NA12878, additional stratification is performed using bed files found here: https://github.com/ga4gh/benchmarking-tools/tree/master/resources/stratification-bed-files
+   * ROC plots are generated using R script: https://github.com/Illumina/hap.py/blob/d51d111e494b561b37c66299daf5a6c65a8d2ca9/src/R/rocplot.Rscript
 
 ## What are the limitations of this app
 * Only works with inputs mapped to GRCh37
