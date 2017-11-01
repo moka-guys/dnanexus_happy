@@ -75,13 +75,6 @@
         "name": "pkrusche/hap.py:v0.3.9"
       }
     ],
-    "systemRequirementsByRegion": {
-      "aws:us-east-1": {
-        "*": {
-          "instanceType": "mem1_ssd1_x4"
-        }
-      }
-    },
     "systemRequirements": {
       "*": {
         "instanceType": "mem1_ssd1_x2"
