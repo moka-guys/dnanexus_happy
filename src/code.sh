@@ -74,10 +74,19 @@ fi
 
 #Run R script to generate ROC curves from hap.py output
 #See following link for details and original script: https://github.com/Illumina/hap.py/blob/d51d111e494b561b37c66299daf5a6c65a8d2ca9/doc/microbench.md
+#The name argument is used to define the label in the plot's key. Use the prefix to set the name, but if it is long shorten it and add ellipsis. This
+#prevents the plot's key growing too wide and squashing the actual plot.
+name=$prefix
+#if name over 15 charaters...
+if [ ${#name} -gt 15 ]; then 
+	#take first 15 characters of prefix then add ...
+	name=${name:0:15}...
+fi
+
 #First command plots true positive rate vs false positive rate
-Rscript rocplot_pdf.Rscript "$prefix".roc_tpr-fpr "$prefix"
+Rscript rocplot_pdf.Rscript "$prefix".roc_tpr-fpr "$prefix":"$name"
 #Second command uses -pr flad to plot precision vs recall 
-Rscript rocplot_pdf.Rscript -pr "$prefix".roc_pre-rec "$prefix"
+Rscript rocplot_pdf.Rscript -pr "$prefix".roc_pre-rec "$prefix":"$name"
 
 #Create csv file containing version numbers of resources and apps used.
 echo "#Resource,Version" > "$prefix".version-log.csv
