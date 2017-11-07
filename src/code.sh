@@ -48,12 +48,15 @@ fi
 #Strip 'chr' from chromsome field of VCF and BED files
 sed  -i 's/chr//' $truth_vcf_path $query_vcf_path $panel_bed_path $high_conf_bed_path
 
-#Zip and index VCFs
-bgzip $truth_vcf_path; tabix -p vcf ${truth_vcf_path}.gz
-bgzip $query_vcf_path; tabix -p vcf ${query_vcf_path}.gz
+#Zip VCFs
+bgzip $truth_vcf_path
+bgzip $query_vcf_path
 #Following gzipping, append .gz to vcf filepath variables
 truth_vcf_path=${truth_vcf_path}.gz
 query_vcf_path=${query_vcf_path}.gz
+#Index VCFs
+tabix -p vcf ${truth_vcf_path}
+tabix -p vcf ${query_vcf_path}
 
 #Run hap.py in docker container
 #Mount /home/dnanexus/ to /data/
