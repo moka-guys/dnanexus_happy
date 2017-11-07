@@ -36,9 +36,12 @@ Note:
 This app outputs:
 1. Summary csv file containing separate performance metrics for SNPs and Indels
 2. Detailed results folder containing:
-    * Extended csv file - *Contains confidence intervals and results stratification*
-    * ROC plots (see https://github.com/Illumina/hap.py/blob/d51d111e494b561b37c66299daf5a6c65a8d2ca9/doc/microbench.md)
-    * VCF file - *contains TP, FP and FN variants*
+    * Extended csv file - *Including results stratification and confidence intervals*
+    * ROC plots and data *see https://github.com/Illumina/hap.py/blob/d51d111e494b561b37c66299daf5a6c65a8d2ca9/doc/microbench.md*
+    * VCF file - *annotated vcf showing TP, FP and FN variants*
+    * runinfo JSON - *detailed information about hap.py run*
+    * version log - *version numbers of software used in app*
+    * metrics JSON - *JSON file containing all computed metrics and tables*
 
 
 ## How does this app work?
