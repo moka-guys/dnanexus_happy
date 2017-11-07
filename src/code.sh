@@ -77,10 +77,11 @@ fi
 #The name argument is used to define the label in the plot's key. Use the prefix to set the name, but if it is long shorten it and add ellipsis. This
 #prevents the plot's key growing too wide and squashing the actual plot.
 name=$prefix
+char_limit=15
 #if name over 15 charaters...
-if [ ${#name} -gt 15 ]; then 
+if [ ${#name} -gt $char_limit ]; then 
 	#take first 15 characters of prefix then add ...
-	name=${name:0:15}...
+	name=${name:0:$char_limit}...
 fi
 
 #First command plots true positive rate vs false positive rate
