@@ -7,10 +7,10 @@ set -e -x -o pipefail
 dx-download-all-inputs --parallel
 
 #Extract required resources from assets folder into /home/dnanexus/
-dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-F7k4g980777vqB04097vQkv0 | tar zxf - #R-3.4.2_ggplot2.tar.gz
-dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-BxVGV9Q022qPQ5f2pbQYqbP4 | tar xf - #hs37d5-fasta.tar
-dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-BxVGXBQ022qPfbkzbJQk87bp | tar xf - #hs37d5-sdf.tar
-dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-BxVGJfj022q45ff2b0j8V73B | tar xf - #stratification-bed-files-f35a0f7.tar
+dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-F7k4g980777vqB04097vQkv0 | tar zxf - # ~/R-3.4.2_ggplot2.tar.gz -> ~/R-3.4.2/
+dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-BxVGV9Q022qPQ5f2pbQYqbP4 | tar xf - # ~/hs37d5-fasta.tar -> ~/hs37d5.fa
+dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-BxVGXBQ022qPfbkzbJQk87bp | tar xf - # ~/hs37d5-sdf.tar -> ~/hs37d5.sdf/
+dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-BxVGJfj022q45ff2b0j8V73B | tar xf - # ~/stratification-bed-files-f35a0f7.tar -> ~/bed_files/
 
 #Add R to path
 export PATH='/home/dnanexus/R-3.4.2/bin:'$PATH
