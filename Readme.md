@@ -1,4 +1,8 @@
-# vcfeval_hap.py v1.0
+# vcfeval_hap.py v1.1
+
+## hap.py version
+v0.3.9 (Docker: https://hub.docker.com/r/pkrusche/hap.py/)
+
 
 ## What does this app do?
 Compares a query VCF to a truth VCF to calculate performance metrics including sensitivity and precision. It is based on the precisionFDA benchmarking tool and uses the vcfeval comparison engine in combination with hap.py. More information available at the following links:
@@ -19,8 +23,9 @@ Input files:
 Parameters:
 1. Output files prefix (required)
 2. Output folder (optional)
-3. Indication if truth set is NA12878 (default = False)
-    * If truth set is NA12878, additional stratification of results is performed and output in extended.csv file
+3. Indication if additional stratification for NA12878 samples should be performed (default = False)
+    * If truth set is NA12878, additional stratification of results can be performed and output in extended.csv file
+    * *HOWEVER* the instance type will need to be upgraded to have at least 7GB of RAM, and the app will take significantly longer to run
 
 Note:  
 * The BED file names must not contain spaces or characters such as + and -
@@ -31,18 +36,21 @@ Note:
 This app outputs:
 1. Summary csv file containing separate performance metrics for SNPs and Indels
 2. Detailed results folder containing:
-    * Extended csv file - *contains performance metrics at multiple stratification levels*
-    * ROC analysis files
-    * VCF file - *contains TP, FP and FN variants*
+    * Extended csv file - *Including results stratification and confidence intervals*
+    * ROC plots and data *see https://github.com/Illumina/hap.py/blob/d51d111e494b561b37c66299daf5a6c65a8d2ca9/doc/microbench.md*
+    * VCF file - *annotated vcf showing TP, FP and FN variants*
+    * runinfo JSON - *detailed information about hap.py run*
+    * version log - *version numbers of software used in app*
+    * metrics JSON - *JSON file containing all computed metrics and tables*
 
 
 ## How does this app work?
 
 * 'chr' is stripped from the chromosome field of the VCF and BED files (if hg19 format used)
-* bedtools is used to create an intersect BED from high conf and panel BED files
 * Indexed and zipped VCF files passed to hap.py:
    * Uses vcfeval comparison engine
    * If the sample is NA12878, additional stratification is performed using bed files found here: https://github.com/ga4gh/benchmarking-tools/tree/master/resources/stratification-bed-files
+   * ROC plots are generated using R script: https://github.com/Illumina/hap.py/blob/d51d111e494b561b37c66299daf5a6c65a8d2ca9/src/R/rocplot.Rscript
 
 ## What are the limitations of this app
 * Only works with inputs mapped to GRCh37

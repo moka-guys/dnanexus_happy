@@ -1,8 +1,8 @@
 {
   "name": "vcfeval_hap.py",
-  "summary": "v1.0 - Use vcfeval and hap.py to calculate NGS performance metrics against truth set (based on precisionFDA app)",
+  "summary": "v1.1 - Use vcfeval and hap.py to calculate NGS performance metrics against truth set (based on precisionFDA app)",
   "properties": {
-    "github release": "v1.0"
+    "github release": "v1.1"
   },
   "dxapi": "1.0.0",
   "inputSpec": [
@@ -42,8 +42,8 @@
     },
     {
       "name": "na12878",
-      "label": "Is the truth set NA12878?",
-      "help": "If the truth set is NA12878 stratification of results will be performed",
+      "label": "Perform NA12878 stratification? (SEE README)",
+      "help": "If the truth set is NA12878, stratification of results will be performed. However this requires the instance type to be upgraded to at least 7GB of RAM and will take longer.",
       "class": "boolean",
       "default": false
     }
@@ -63,33 +63,21 @@
   "runSpec": {
     "execDepends": [
       {
-        "name": "openjdk-8-jre-headless"
-      },
-      {
-        "name": "tabix"
-      },
-      {
-        "name": "bedtools"
+        "name": "tabix",
+        "version": "0.2.6-2"
       }
     ],
     "assetDepends": [
       {
-        "project": "project-F4vYpqQ0777Z1VjzGPj79v67",
-        "folder": "/assets",
+        "project": "project-ByfFPz00jy1fk6PjpZ95F27J",
+        "folder": "/Apps/vcfeval_hap.py/assets",
         "version": "0.0.1",
         "name": "pkrusche/hap.py:v0.3.9"
       }
     ],
-    "systemRequirementsByRegion": {
-      "aws:us-east-1": {
-        "*": {
-          "instanceType": "mem1_ssd1_x4"
-        }
-      }
-    },
     "systemRequirements": {
       "*": {
-        "instanceType": "mem1_ssd1_x4"
+        "instanceType": "mem1_ssd1_x2"
       }
     },
     "file": "src/code.sh",
@@ -98,7 +86,7 @@
     "distribution": "Ubuntu"
   },
   "access": {
-    "project": "VIEW",
+    "allProjects": "VIEW",
     "network": [
       "*"
     ]
