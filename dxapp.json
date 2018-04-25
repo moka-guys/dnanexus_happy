@@ -73,6 +73,12 @@
         "folder": "/Apps/vcfeval_hap.py/assets",
         "version": "0.0.1",
         "name": "pkrusche/hap.py:v0.3.9"
+      },
+      {
+        "project": "project-FFQ78p00G6VJYPkB9xFjZ5P0",
+        "folder": "/assets",
+        "name": "mokaguys/ga4gh_rep.py:v1.0",
+        "version": "0.0.1"
       }
     ],
     "systemRequirements": {
