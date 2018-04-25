@@ -58,6 +58,11 @@
       "name": "summary_csv",
       "label": "Summary CSV",
       "class": "file"
+    },
+    {
+      "name": "summary_html",
+      "label": "Summary HTML report",
+      "class": "file"
     }
   ],
   "runSpec": {

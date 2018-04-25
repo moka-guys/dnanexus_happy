@@ -84,9 +84,11 @@ echo "tabix,v0.2.6-2" >> "$prefix".version-log.csv
 #Make directories to hold outputs
 mkdir /home/dnanexus/out
 mkdir /home/dnanexus/out/summary_csv
+mkdir /home/dnanexus/out/summary_html
 mkdir /home/dnanexus/out/detailed_results
 #Move outputs to correct directories for upload back to project
 cp "$prefix".summary.csv /home/dnanexus/out/summary_csv/
+cp "$prefix".summary_report.html /home/dnanexus/out/summary_html/
 tar zcvf /home/dnanexus/out/detailed_results/"$prefix".tar.gz "$prefix".*
 
 #Upload outputs (from /home/dnanexus/out) to DNAnexus
