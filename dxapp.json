@@ -1,8 +1,8 @@
 {
-  "name": "vcfeval_hap.py",
+  "name": "vcfeval_hap.py_v1.2",
   "summary": "v1.1 - Use vcfeval and hap.py to calculate NGS performance metrics against truth set (based on precisionFDA app)",
   "properties": {
-    "github release": "v1.1"
+    "github release": "v1.2"
   },
   "dxapi": "1.0.0",
   "inputSpec": [
