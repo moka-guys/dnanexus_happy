@@ -1,4 +1,4 @@
-# vcfeval_hap.py v1.1
+# vcfeval_hap.py v1.2
 
 ## hap.py version
 v0.3.9 (Docker: https://hub.docker.com/r/pkrusche/hap.py/)
@@ -35,9 +35,9 @@ Note:
 
 This app outputs:
 1. Summary csv file containing separate performance metrics for SNPs and Indels
-2. Detailed results folder containing:
+2. Summary report HTML (generated using ga4gh rep.py https://github.com/ga4gh/benchmarking-tools/tree/master/reporting/basic)
+3. Detailed results folder containing:
     * Extended csv file - *Including results stratification and confidence intervals*
-    * ROC plots and data *see https://github.com/Illumina/hap.py/blob/d51d111e494b561b37c66299daf5a6c65a8d2ca9/doc/microbench.md*
     * VCF file - *annotated vcf showing TP, FP and FN variants*
     * runinfo JSON - *detailed information about hap.py run*
     * version log - *version numbers of software used in app*
@@ -50,7 +50,7 @@ This app outputs:
 * Indexed and zipped VCF files passed to hap.py:
    * Uses vcfeval comparison engine
    * If the sample is NA12878, additional stratification is performed using bed files found here: https://github.com/ga4gh/benchmarking-tools/tree/master/resources/stratification-bed-files
-   * ROC plots are generated using R script: https://github.com/Illumina/hap.py/blob/d51d111e494b561b37c66299daf5a6c65a8d2ca9/src/R/rocplot.Rscript
+   * Summary HTML is generated
 
 ## What are the limitations of this app
 * Only works with inputs mapped to GRCh37
