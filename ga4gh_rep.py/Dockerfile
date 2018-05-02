@@ -1,6 +1,7 @@
 ## mokaguys/ga4gh_rep.py:v1.0
-## Used to produce HTML report based on output from Illumina hap.py
+## Builds docker image for ga4gh reporting tool which produces HTML summary report based on output from Illumina hap.py
 ## See https://github.com/ga4gh/benchmarking-tools/tree/master/reporting/basic
+## Example usage at https://hub.docker.com/r/mokaguys/ga4gh_rep.py/
 
 # Use miniconda as parent image
 FROM continuumio/miniconda:latest
