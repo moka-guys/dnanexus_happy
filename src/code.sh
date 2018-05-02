@@ -71,7 +71,7 @@ else
           --ci-alpha 0.05 -o data/"$prefix" ${truth_vcf_path/home\/dnanexus/data} ${query_vcf_path/home\/dnanexus/data}
 fi
 
-# Generate summary_report
+# Generate summary_report HTML using ga4gh reporting tool (https://github.com/ga4gh/benchmarking-tools/tree/master/reporting/basic)
 dx-docker run -v /home/dnanexus/:/data mokaguys/ga4gh_rep.py:v1.0 -o /data/${prefix}.summary_report.html ${prefix}_vcfeval-hap.py:/data/${prefix}.roc.all.csv.gz
 
 #Create csv file containing version numbers of resources and apps used.
