@@ -92,7 +92,7 @@ mkdir /home/dnanexus/out/detailed_results
 #Move outputs to correct directories for upload back to project
 cp "$prefix".summary.csv /home/dnanexus/out/summary_csv/
 cp "$prefix".summary_report.html /home/dnanexus/out/summary_html/
-tar zcvf /home/dnanexus/out/detailed_results/"$prefix".tar.gz "$prefix".*
+zip -r /home/dnanexus/out/detailed_results/"$prefix".zip "$prefix".*
 
 #Upload outputs (from /home/dnanexus/out) to DNAnexus
 dx-upload-all-outputs --parallel
