@@ -72,7 +72,10 @@ else
 fi
 
 # Generate summary_report HTML using ga4gh reporting tool (https://github.com/ga4gh/benchmarking-tools/tree/master/reporting/basic)
-dx-docker run -v /home/dnanexus/:/data mokaguys/ga4gh_rep.py:v1.0 -o /data/${prefix}.summary_report.html ${prefix}_vcfeval-hap.py:/data/${prefix}.roc.all.csv.gz
+# Input is in the format {method-name}_{comparison-name}:{path-to-hap.py-roc.all.csv.gz-output}
+# Here method name uses the VCF name (replacing underscores with hyphens because underscore is used to separate the 'method' and 'comparison method' fields)
+# and the comparison method is vcfeval-hap.py 
+dx-docker run -v /home/dnanexus/:/data mokaguys/ga4gh_rep.py:v1.0 -o /data/${prefix}.summary_report.html ${prefix//_/-}_vcfeval-hap.py:/data/${prefix}.roc.all.csv.gz
 
 #Create csv file containing version numbers of resources and apps used.
 echo "#Resource,Version" > "$prefix".version-log.csv
