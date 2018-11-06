@@ -55,18 +55,22 @@ tabix -p vcf ${truth_vcf_path}
 tabix -p vcf ${query_vcf_path}
 
 #Run hap.py in docker container
+#The options used are based on those used when running the precisionFDA GA4GH Benchmarking in vcfeval-partial-credit mode, with gender as female (i.e. NA12878)
+#and Adjust confident regions as False (in the README on the precisionFDA app it warns that this option can cause non-confident calls to slip back into confident region)
 #Mount /home/dnanexus/ to /data/
 #For input files that are stored in /home/dnanexus/in/... replace '/home/dnanexus' with '/data' in filepath using: ${orig_filepath/home\/dnanexus/data} 
 #If sample is flagged as NA12878, use HG001 stratification bed files (indexed in files-HG001.tsv) to provide additional stratification of results
 if $na12878; then
      dx-docker run -v /home/dnanexus/:/data pkrusche/hap.py:v0.3.9 /opt/hap.py/bin/hap.py \
-          -r /data/hs37d5.fa --stratification data/files-HG001.tsv --pass-only \
+          -r /data/hs37d5.fa --stratification data/files-HG001.tsv \
+		  --gender female --decompose --leftshift \
           --engine vcfeval -f ${high_conf_bed_path/home\/dnanexus/data} -T ${panel_bed_path/home\/dnanexus/data} \
           --ci-alpha 0.05 -o data/"$prefix" ${truth_vcf_path/home\/dnanexus/data} ${query_vcf_path/home\/dnanexus/data}
 #Else if sample is not flagged as NA12878, run same command as above but without the stratification option
 else
      dx-docker run -v /home/dnanexus/:/data pkrusche/hap.py:v0.3.9 /opt/hap.py/bin/hap.py \
-          -r /data/hs37d5.fa --pass-only \
+          -r /data/hs37d5.fa \
+		  --gender female --decompose --leftshift \
           --engine vcfeval -f ${high_conf_bed_path/home\/dnanexus/data} -T ${panel_bed_path/home\/dnanexus/data} \
           --ci-alpha 0.05 -o data/"$prefix" ${truth_vcf_path/home\/dnanexus/data} ${query_vcf_path/home\/dnanexus/data}
 fi
