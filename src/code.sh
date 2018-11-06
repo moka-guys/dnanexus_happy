@@ -63,14 +63,14 @@ tabix -p vcf ${query_vcf_path}
 if $na12878; then
      dx-docker run -v /home/dnanexus/:/data pkrusche/hap.py:v0.3.9 /opt/hap.py/bin/hap.py \
           -r /data/hs37d5.fa --stratification data/files-HG001.tsv \
-		  --gender female --decompose --leftshift \
+          --gender female --decompose --leftshift \
           --engine vcfeval -f ${high_conf_bed_path/home\/dnanexus/data} -T ${panel_bed_path/home\/dnanexus/data} \
           --ci-alpha 0.05 -o data/"$prefix" ${truth_vcf_path/home\/dnanexus/data} ${query_vcf_path/home\/dnanexus/data}
 #Else if sample is not flagged as NA12878, run same command as above but without the stratification option
 else
      dx-docker run -v /home/dnanexus/:/data pkrusche/hap.py:v0.3.9 /opt/hap.py/bin/hap.py \
           -r /data/hs37d5.fa \
-		  --gender female --decompose --leftshift \
+          --gender female --decompose --leftshift \
           --engine vcfeval -f ${high_conf_bed_path/home\/dnanexus/data} -T ${panel_bed_path/home\/dnanexus/data} \
           --ci-alpha 0.05 -o data/"$prefix" ${truth_vcf_path/home\/dnanexus/data} ${query_vcf_path/home\/dnanexus/data}
 fi
