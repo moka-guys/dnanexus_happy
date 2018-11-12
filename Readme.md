@@ -5,8 +5,8 @@ v0.3.9 (Docker: https://hub.docker.com/r/pkrusche/hap.py/)
 
 
 ## What does this app do?
-Compares a query VCF to a truth VCF to calculate performance metrics including sensitivity and precision. It is based on the precisionFDA benchmarking tool and uses the vcfeval comparison engine in combination with hap.py. More information available at the following links:
-* https://precision.fda.gov/challenges/truth/results
+Compares a query VCF to a truth VCF to calculate performance metrics including sensitivity and precision using hap.py and vcfeval. It is equivalent to running the precisionFDA GA4GH benchmarking app in 'vcfeval-partialcredit' mode with other options left as default. More information available at the following links:
+* https://precision.fda.gov/apps/app-F5YXbp80PBYFP059656gYxXQ
 * https://github.com/ga4gh/benchmarking-tools/tree/master/doc/ref-impl
 
 ## What are typical use cases for this app?
