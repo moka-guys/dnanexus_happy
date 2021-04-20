@@ -102,7 +102,7 @@
       }
     },
     "file": "src/code.sh",
-    "release": "18.04",
+    "release": "16.04",
     "interpreter": "bash",
     "distribution": "Ubuntu"
   },
