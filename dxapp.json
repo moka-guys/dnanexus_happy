@@ -11,28 +11,38 @@
       "label": "Query VCF",
       "help": "VCF file containing queryset variants (.vcf or .vcf.gz)",
       "class": "file",
-      "patterns": ["*.vcf", "*.vcf.gz"]
+      "patterns": [
+        "*.vcf",
+        "*.vcf.gz"
+      ]
     },
     {
       "name": "truth_vcf",
       "label": "Truth VCF",
       "help": "VCF file containing truthset variants (.vcf or .vcf.gz)",
       "class": "file",
-      "patterns": ["*.vcf", "*.vcf.gz"]
+      "patterns": [
+        "*.vcf",
+        "*.vcf.gz"
+      ]
     },
     {
       "name": "panel_bed",
       "label": "Panel BED",
       "help": "BED containing region (e.g. panel) covered in queryset vcf",
       "class": "file",
-      "patterns": ["*.bed"]
+      "patterns": [
+        "*.bed"
+      ]
     },
     {
       "name": "high_conf_bed",
       "label": "High Confidence BED",
       "help": "BED containing high confidence region for truth set",
       "class": "file",
-      "patterns": ["*.bed"]
+      "patterns": [
+        "*.bed"
+      ]
     },
     {
       "name": "prefix",
@@ -92,7 +102,7 @@
       }
     },
     "file": "src/code.sh",
-    "release": "14.04",
+    "release": "18.04",
     "interpreter": "bash",
     "distribution": "Ubuntu"
   },
