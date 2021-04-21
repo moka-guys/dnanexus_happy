@@ -79,7 +79,7 @@
     "execDepends": [
       {
         "name": "tabix",
-        "version": "1.7-2"
+        "version": "1.10.2-3"
       }
     ],
     "assetDepends": [
