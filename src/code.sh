@@ -85,7 +85,7 @@ echo "#Resource,Version" > "$prefix".version-log.csv
 echo "GIAB(NA12878),v3.3.2" >> "$prefix".version-log.csv
 echo "Reference,hs37d5" >> "$prefix".version-log.csv
 echo "hap.py,v0.3.9(Docker)" >> "$prefix".version-log.csv
-echo "tabix,v0.2.6-2" >> "$prefix".version-log.csv
+echo "tabix,v1.7-2" >> "$prefix".version-log.csv
 
 #Make directories to hold outputs
 mkdir /home/dnanexus/out
