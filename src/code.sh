@@ -6,16 +6,27 @@ set -e -x -o pipefail
 #Download inputs from DNAnexus in parallel, these will be downloaded to /home/dnanexus/in/
 dx-download-all-inputs --parallel
 
-#Extract required resources from assets folder into /home/dnanexus/
-dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-BxVGV9Q022qPQ5f2pbQYqbP4 | tar xf - # ~/hs37d5-fasta.tar -> ~/hs37d5.fa
-dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-BxVGXBQ022qPfbkzbJQk87bp | tar xf - # ~/hs37d5-sdf.tar -> ~/hs37d5.sdf/
-dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-BxVGJfj022q45ff2b0j8V73B | tar xf - # ~/stratification-bed-files-f35a0f7.tar -> ~/bed_files/
+if [[  $genome_reference == "GRCh37" ]]; then
+	echo "Using build GRCh37 as genome reference."
+	#Extract GRCh37 required resources from assets folder into /home/dnanexus/
+	dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-BxVGV9Q022qPQ5f2pbQYqbP4 | tar xf - # ~/hs37d5-fasta.tar -> ~/hs37d5.fa
+	dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-BxVGXBQ022qPfbkzbJQk87bp | tar xf - # ~/hs37d5-sdf.tar -> ~/S$d862kmwwee/
+	dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-BxVGJfj022q45ff2b0j8V73B | tar xf - # ~/stratification-bed-files-f35a0f7.tar -> ~/bed_files/
+elif [[  $genome_reference == "GRCh38" ]]; then
+	echo "Using build GRCh38 as genome reference."
+	#Extract GRCh38 required resources from assets folder into /home/dnanexus/
+	dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-G2BfBBQ0xkZ102vP42kbbb8v | tar xf - # ~/GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.fasta.gz -> ~/GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.fasta
+	dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-G2Gb5P80xkZ7Vqf7FJBYykXP | tar xf - # ~/GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.sdf.tar.gz -> ~/GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.sdf
+	dx cat project-G2BbV380xkZ8Zq46J1V3k5Pp:file-G2GjYXQ0xkZ3jxBj43yXJg43 | tar xf - # ~/build38_Bed_Stratification.tar.gz -> ~/bed_files/
+else
+	echo >&2 "WARNING: No valid genome reference specified."
+fi
 
-#The files-HG001.tsv file is a master file containing relative filepaths to all of the bed files used by hap.py for results stratifcation.
-#files-HG001.tsv must in the parent directory of the bed_files/ directory for relative filepaths to be correct, so copy from /home/dnanexus/bed_files/ > /home/dnanexus/ 
-cp ./bed_files/files-HG001.tsv ./files-HG001.tsv
+#The files-HG001.tsv for GCRh37, or v2.0-GRCh38-stratifications.tsv for GCRh38, file is a master file containing relative filepaths to all of the bed files used by hap.py for results stratifcation.
+#The stratification tsv must in the parent directory of the bed_files/ directory for relative filepaths to be correct, so copy from /home/dnanexus/bed_files/ > /home/dnanexus/ 
+cp ./bed_files/*.tsv ./
 
-#The app accept both uncompressed (.vcf) and gzipped (.vcf.gz) VCF files as input
+#The app accepts both uncompressed (.vcf) and gzipped (.vcf.gz) VCF files as input
 #If files are compressed, they need to be decompressed.
 
 if [[  $truth_vcf_path =~ \.gz$ ]]; then
@@ -62,8 +73,8 @@ if [[  $genome_reference == "GRCh37" ]]; then
 	genome_version4log="hs37d5"
 elif [[  $genome_reference == "GRCh38" ]]; then
 	echo "Using build GRCh38 as genome reference."
-	genome_ref_fasta="TODO"
-	genome_version4log="TODO"
+	genome_ref_fasta="GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.fasta"
+	genome_version4log="GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions"
 else
 	echo >&2 "WARNING: No valid genome reference specified."
 fi
@@ -75,7 +86,7 @@ fi
 #If sample is flagged as NA12878, use HG001 stratification bed files (indexed in files-HG001.tsv) to provide additional stratification of results
 if $na12878; then
      docker run -v /home/dnanexus/:/data pkrusche/hap.py:v0.3.9 /opt/hap.py/bin/hap.py \
-          -r $genome_ref_fasta --stratification data/files-HG001.tsv \
+          -r $genome_ref_fasta --stratification data/*.tsv \
           --gender female --decompose --leftshift --adjust-conf-regions \
           --engine vcfeval -f ${high_conf_bed_path/home\/dnanexus/data} -T ${panel_bed_path/home\/dnanexus/data} \
           --ci-alpha 0.05 -o data/"$prefix" ${truth_vcf_path/home\/dnanexus/data} ${query_vcf_path/home\/dnanexus/data}

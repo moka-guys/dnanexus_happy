@@ -58,7 +58,7 @@
       "default": false
     },
     {
-      "name": "genome_reference",
+      "name": "genome_build",
       "class": "string",
       "default": "GRCh37",
       "choices": [
