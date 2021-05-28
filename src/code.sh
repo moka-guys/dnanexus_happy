@@ -73,7 +73,7 @@ if [[  $genome_reference == "GRCh37" ]]; then
 	genome_version4log="hs37d5"
 elif [[  $genome_reference == "GRCh38" ]]; then
 	echo "Using build GRCh38 as genome reference."
-	genome_ref_fasta="GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.fasta"
+	genome_ref_fasta="/data/GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.fasta"
 	genome_version4log="GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions"
 else
 	echo >&2 "WARNING: No valid genome reference specified."
@@ -93,7 +93,7 @@ if $na12878; then
 #Else if sample is not flagged as NA12878, run same command as above but without the stratification option
 else
      docker run -v /home/dnanexus/:/data pkrusche/hap.py:v0.3.9 /opt/hap.py/bin/hap.py \
-          -r $genome_ref_fasta \
+          -r ${genome_ref_fasta/home\/dnanexus/data} \
           --gender female --decompose --leftshift --adjust-conf-regions \
           --engine vcfeval -f ${high_conf_bed_path/home\/dnanexus/data} -T ${panel_bed_path/home\/dnanexus/data} \
           --ci-alpha 0.05 -o data/"$prefix" ${truth_vcf_path/home\/dnanexus/data} ${query_vcf_path/home\/dnanexus/data}
