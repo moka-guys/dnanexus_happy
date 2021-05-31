@@ -15,7 +15,7 @@ if [[  $genome_reference == "GRCh37" ]]; then
 elif [[  $genome_reference == "GRCh38" ]]; then
 	echo "Using build GRCh38 as genome reference."
 	#Extract GRCh38 required resources from assets folder into /home/dnanexus/
-	dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-G2BfBBQ0xkZ102vP42kbbb8v | gunzip -c > GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.fasta # ~/GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.fasta.gz -> ~/GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.fasta
+	dx cat project-G2BbV380xkZ8Zq46J1V3k5Pp:file-G2pB76Q0xkZ5X2j873g915YK | tar xf - #  ~/GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.fasta
 	dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-G2Gb5P80xkZ7Vqf7FJBYykXP | tar zxf - # ~/GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.sdf.tar.gz -> ~/GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.sdf
 	dx cat project-G2BbV380xkZ8Zq46J1V3k5Pp:file-G2GjYXQ0xkZ3jxBj43yXJg43 | tar zxf - # ~/build38_Bed_Stratification.tar.gz -> ~/bed_files/
 else
