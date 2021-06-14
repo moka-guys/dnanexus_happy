@@ -1,10 +1,16 @@
 #!/bin/bash
 
 # -e = exit on error; -x = output each line that is executed to log; -o pipefail = throw an error if there's an error in pipeline
-set -e -x -o pipefail
+# set -e -x -o pipefail
 
 #Download inputs from DNAnexus in parallel, these will be downloaded to /home/dnanexus/in/
 dx-download-all-inputs --parallel
+
+echo >&2 "/ngenome_reference=${genome_reference}"
+echo >&2 "truth_vcf_path=${truth_vcf_path}"
+echo >&2 "query_vcf_path=${query_vcf_path}"
+echo >&2 "high_conf_bed_path=${high_conf_bed_path}"
+echo >&2 "panel_bed_path=${panel_bed_path}"
 
 if [[  $genome_reference == "GRCh37" ]]; then
 	echo "Using build GRCh37 as genome reference."
@@ -15,7 +21,7 @@ if [[  $genome_reference == "GRCh37" ]]; then
 elif [[  $genome_reference == "GRCh38" ]]; then
 	echo "Using build GRCh38 as genome reference."
 	#Extract GRCh38 required resources from assets folder into /home/dnanexus/
-	dx cat project-G2BbV380xkZ8Zq46J1V3k5Pp:file-G2pB76Q0xkZ5X2j873g915YK | tar xf - #  ~/GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.fasta
+	dx cat project-G2BbV380xkZ8Zq46J1V3k5Pp:file-G33q1Y00xkZ9V4z4Kq2q3kgv | tar xf - #  ~/GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.fasta
 	dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-G2Gb5P80xkZ7Vqf7FJBYykXP | tar zxf - # ~/GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.sdf.tar.gz -> ~/GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.sdf
 	dx cat project-G2BbV380xkZ8Zq46J1V3k5Pp:file-G2GjYXQ0xkZ3jxBj43yXJg43 | tar zxf - # ~/build38_Bed_Stratification.tar.gz -> ~/bed_files/
 else
@@ -86,7 +92,7 @@ fi
 #If sample is flagged as NA12878, use HG001 stratification bed files (indexed in files-HG001.tsv) to provide additional stratification of results
 if $na12878; then
      docker run -v /home/dnanexus/:/data pkrusche/hap.py:v0.3.9 /opt/hap.py/bin/hap.py \
-          -r $genome_ref_fasta --stratification data/*.tsv \
+          -r ${genome_ref_fasta/home\/dnanexus/data} --stratification data/*.tsv \
           --gender female --decompose --leftshift --adjust-conf-regions \
           --engine vcfeval -f ${high_conf_bed_path/home\/dnanexus/data} -T ${panel_bed_path/home\/dnanexus/data} \
           --ci-alpha 0.05 -o data/"$prefix" ${truth_vcf_path/home\/dnanexus/data} ${query_vcf_path/home\/dnanexus/data}
@@ -98,6 +104,7 @@ else
           --engine vcfeval -f ${high_conf_bed_path/home\/dnanexus/data} -T ${panel_bed_path/home\/dnanexus/data} \
           --ci-alpha 0.05 -o data/"$prefix" ${truth_vcf_path/home\/dnanexus/data} ${query_vcf_path/home\/dnanexus/data}
 fi
+
 
 # Generate summary_report HTML using ga4gh reporting tool (https://github.com/ga4gh/benchmarking-tools/tree/master/reporting/basic)
 # Input is in the format {method-name}_{comparison-name}:{path-to-hap.py-roc.all.csv.gz-output}
