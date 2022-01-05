@@ -26,6 +26,7 @@ Parameters:
 3. Indication if additional stratification for NA12878 samples should be performed (default = False)
     * If truth set is NA12878, additional stratification of results can be performed and output in extended.csv file
     * *HOWEVER* the instance type will need to be upgraded to have at least 7GB of RAM, and the app will take significantly longer to run
+4. Reference Genome build GRCh37 (default) or GRCh38
 
 Note:  
 * The BED file names must not contain spaces or characters such as + and -
@@ -53,6 +54,6 @@ This app outputs:
    * Summary HTML is generated
 
 ## What are the limitations of this app
-* Only works with inputs mapped to GRCh37
+* Only works with inputs mapped to GRCh37 or GRCh38
 
 ## This app was made by Viapath Genome Informatics
