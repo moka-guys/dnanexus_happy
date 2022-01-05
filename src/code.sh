@@ -21,9 +21,9 @@ if [[  $genome_reference == "GRCh37" ]]; then
 elif [[  $genome_reference == "GRCh38" ]]; then
 	echo "Using build GRCh38 as genome reference."
 	#Extract GRCh38 required resources from assets folder into /home/dnanexus/
-	dx cat project-G2BbV380xkZ8Zq46J1V3k5Pp:file-G33q1Y00xkZ9V4z4Kq2q3kgv | tar xf - #  ~/GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.fasta
+	dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-G33q1Y00xkZ9V4z4Kq2q3kgv | tar xf - #  ~/GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.fasta
 	dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-G2Gb5P80xkZ7Vqf7FJBYykXP | tar zxf - # ~/GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.sdf.tar.gz -> ~/GCA_000001405.15_GRCh38_no_alt_analysis_set_maskedGRC_exclusions.sdf
-	dx cat project-G2BbV380xkZ8Zq46J1V3k5Pp:file-G2GjYXQ0xkZ3jxBj43yXJg43 | tar zxf - # ~/build38_Bed_Stratification.tar.gz -> ~/bed_files/
+	dx cat project-ByfFPz00jy1fk6PjpZ95F27J:file-G2GjYXQ0xkZ3jxBj43yXJg43 | tar zxf - # ~/build38_Bed_Stratification.tar.gz -> ~/bed_files/
 else
 	echo >&2 "WARNING: No valid genome reference specified."
 fi
