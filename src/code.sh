@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # -e = exit on error; -x = output each line that is executed to log; -o pipefail = throw an error if there's an error in pipeline
-# set -e -x -o pipefail
+set -e -x -o pipefail
 
 #Download inputs from DNAnexus in parallel, these will be downloaded to /home/dnanexus/in/
 dx-download-all-inputs --parallel
