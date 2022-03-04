@@ -1,4 +1,4 @@
-# vcfeval_hap.py v1.4.0
+# vcfeval_hap.py v1.4.1
 
 ## hap.py version
 v0.3.9 (Docker: https://hub.docker.com/r/pkrusche/hap.py/)
@@ -21,12 +21,13 @@ Input files:
 4. A high confidence region BED file (.bed) - *high confidence region for truth set*
 
 Parameters:
-1. Output files prefix (required)
-2. Output folder (optional)
-3. Indication if additional stratification for NA12878 samples should be performed (default = False)
+1. Skip - default = false. If set to true will exit without performing any analysis
+2. Output files prefix (required)
+3. Output folder (optional)
+4. Indication if additional stratification for NA12878 samples should be performed (default = False)
     * If truth set is NA12878, additional stratification of results can be performed and output in extended.csv file
     * *HOWEVER* the instance type will need to be upgraded to have at least 7GB of RAM, and the app will take significantly longer to run
-4. Reference Genome build GRCh37 (default) or GRCh38
+5. Reference Genome build GRCh37 (default) or GRCh38
 
 Note:  
 * The BED file names must not contain spaces or characters such as + and -
