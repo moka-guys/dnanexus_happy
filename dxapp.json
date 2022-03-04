@@ -65,7 +65,15 @@
         "GRCh37",
         "GRCh38"
       ]
-    }
+    },
+    {
+      "name": "skip",
+      "label": "skip",
+      "help": "Skip this step if not required",
+      "class": "boolean",
+      "default": false,
+      "optional": false
+      }
   ],
   "outputSpec": [
     {

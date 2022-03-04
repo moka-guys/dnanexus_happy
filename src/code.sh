@@ -2,7 +2,9 @@
 
 # -e = exit on error; -x = output each line that is executed to log; -o pipefail = throw an error if there's an error in pipeline
 set -e -x -o pipefail
-
+if [[ $skip = True ]]; then
+exit 0
+fi
 #Download inputs from DNAnexus in parallel, these will be downloaded to /home/dnanexus/in/
 dx-download-all-inputs --parallel
 
