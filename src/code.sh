@@ -90,15 +90,25 @@ if [[ $skip == false ]]; then
 	#Mount /home/dnanexus/ to /data/
 	#For input files that are stored in /home/dnanexus/in/... replace '/home/dnanexus' with '/data' in filepath using: ${orig_filepath/home\/dnanexus/data} 
 	#If sample is flagged as NA12878, use HG001 stratification bed files (indexed in files-HG001.tsv) to provide additional stratification of results
+	
+	#get docker image and extract
+	vcfeval_happy_docker_file_id=project-ByfFPz00jy1fk6PjpZ95F27J:file-G9ZXyyj0jy1VppkQ93ZZFqYG
+	dx download ${vcfeval_happy_docker_file_id}
+	vcfeval_happy_Docker_image_file=$(dx describe ${vcfeval_happy_docker_file_id} --name)
+	vcfeval_happy_Docker_image_name=$(tar xfO "${vcfeval_happy_Docker_image_file}" manifest.json | sed -E 's/.*"RepoTags":\["?([^"]*)"?.*/\1/')
+
+	docker load < /home/dnanexus/"${vcfeval_happy_Docker_image_file}"
+	echo "Using docker image ${vcfeval_happy_Docker_image_name}"
+	
 	if $na12878; then
-		docker run -v /home/dnanexus/:/data pkrusche/hap.py:v0.3.9 /opt/hap.py/bin/hap.py \
+		docker run -v /home/dnanexus/:/data --rm ${vcfeval_happy_Docker_image_name} /opt/hap.py/bin/hap.py \
 			-r ${genome_ref_fasta/home\/dnanexus/data} --stratification data/*.tsv \
 			--gender female --decompose --leftshift --adjust-conf-regions \
 			--engine vcfeval -f ${high_conf_bed_path/home\/dnanexus/data} -T ${panel_bed_path/home\/dnanexus/data} \
 			--ci-alpha 0.05 -o data/"$prefix" ${truth_vcf_path/home\/dnanexus/data} ${query_vcf_path/home\/dnanexus/data}
 	#Else if sample is not flagged as NA12878, run same command as above but without the stratification option
 	else
-		docker run -v /home/dnanexus/:/data pkrusche/hap.py:v0.3.9 /opt/hap.py/bin/hap.py \
+		docker run -v /home/dnanexus/:/data --rm ${vcfeval_happy_Docker_image_name} /opt/hap.py/bin/hap.py \
 			-r ${genome_ref_fasta/home\/dnanexus/data} \
 			--gender female --decompose --leftshift --adjust-conf-regions \
 			--engine vcfeval -f ${high_conf_bed_path/home\/dnanexus/data} -T ${panel_bed_path/home\/dnanexus/data} \

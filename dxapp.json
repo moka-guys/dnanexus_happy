@@ -1,8 +1,8 @@
 {
-  "name": "vcfeval_hap.py_v1.4.2",
-  "summary": "v1.4.2 - Use vcfeval and hap.py to calculate NGS performance metrics against truth set (based on precisionFDA app)",
+  "name": "vcfeval_hap.py_v1.4.3",
+  "summary": "v1.4.3 - Use vcfeval and hap.py to calculate NGS performance metrics against truth set (based on precisionFDA app)",
   "properties": {
-    "github release": "v1.4.2"
+    "github release": "v1.4.3"
   },
   "dxapi": "1.0.0",
   "inputSpec": [
@@ -11,38 +11,28 @@
       "label": "Query VCF",
       "help": "VCF file containing queryset variants (.vcf or .vcf.gz)",
       "class": "file",
-      "patterns": [
-        "*.vcf",
-        "*.vcf.gz"
-      ]
+      "patterns": ["*.vcf", "*.vcf.gz"]
     },
     {
       "name": "truth_vcf",
       "label": "Truth VCF",
       "help": "VCF file containing truthset variants (.vcf or .vcf.gz)",
       "class": "file",
-      "patterns": [
-        "*.vcf",
-        "*.vcf.gz"
-      ]
+      "patterns": ["*.vcf", "*.vcf.gz"]
     },
     {
       "name": "panel_bed",
       "label": "Panel BED",
       "help": "BED containing region (e.g. panel) covered in queryset vcf",
       "class": "file",
-      "patterns": [
-        "*.bed"
-      ]
+      "patterns": ["*.bed"]
     },
     {
       "name": "high_conf_bed",
       "label": "High Confidence BED",
       "help": "BED containing high confidence region for truth set",
       "class": "file",
-      "patterns": [
-        "*.bed"
-      ]
+      "patterns": ["*.bed"]
     },
     {
       "name": "prefix",
@@ -71,9 +61,9 @@
       "label": "skip",
       "help": "Skip this step if not required",
       "class": "boolean",
-      "default": false,
-      "optional": false
-      }
+      "optional": false,
+      "default": false
+    }
   ],
   "outputSpec": [
     {
@@ -96,41 +86,33 @@
     }
   ],
   "runSpec": {
+    "interpreter": "bash",
+    "headJobOnDemand": false,
     "execDepends": [
       {
         "name": "tabix",
         "version": "1.10.2-3"
       }
     ],
-    "assetDepends": [
-      {
-        "project": "project-ByfFPz00jy1fk6PjpZ95F27J",
-        "folder": "/Apps/vcfeval_hap.py/assets",
-        "name": "pkrusche/hap.py:v0.3.9",
-        "version": "0.0.1"
-      },
-      {
-        "project": "project-ByfFPz00jy1fk6PjpZ95F27J",
-        "folder": "/Apps/vcfeval_hap.py/assets",
-        "name": "mokaguys/ga4gh_rep.py:v1.0",
-        "version": "0.0.1"
-      }
-    ],
-    "systemRequirements": {
-      "*": {
-        "instanceType": "mem1_ssd1_v2_x2"
-      }
-    },
-    "file": "src/code.sh",
+    "distribution": "Ubuntu",
     "release": "20.04",
     "version": "0",
-    "interpreter": "bash",
-    "distribution": "Ubuntu"
+    "file": "src/code.sh"
   },
   "access": {
-    "allProjects": "VIEW",
     "network": [
       "*"
-    ]
+    ],
+    "allProjects": "VIEW"
+  },
+  "ignoreReuse": false,
+  "regionalOptions": {
+    "aws:us-east-1": {
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem1_ssd1_v2_x2"
+        }
+      }
+    }
   }
 }
